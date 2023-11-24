@@ -1,35 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
+import Timer from './componentes/Timer.jsx';
+import { TimerProvider } from './contexto/TimerContext.jsx';
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <TimerProvider>
+      {/* Aquí otros componentes de la aplicación */}
+      <div className="cont-timer">
+        <Timer id={0} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="cont-timer">
+        <Timer id={1} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <div className="cont-timer">
+        <Timer id={2} />
+      </div>
+      <div className="cont-timer">
+        <Timer id={3} />
+      </div>
+      {/* ...otros timers con diferentes índices */}
+      
+    </TimerProvider>
+  );
+};
 
-export default App
+export default App;
