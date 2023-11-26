@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
-
 const TimerContext = createContext();
 
-const TimerProvider = ({ children }) => {
-  const [timers, setTimers] = useState([
-    { id: 0, timeLeft: 20, isRunning: true },
-    { id: 1, timeLeft: 30, isRunning: true },
-    { id: 2, timeLeft: 40, isRunning: true },
-    { id: 3, timeLeft: 50, isRunning: true }
-  ]);
+  const TimerProvider = ({ children }) => {
+    const initialTimers = [
+      { id: 0, duration: 20, timeLeft: 20, isRunning: true, isVisible: true },
+      { id: 1, duration: 30, timeLeft: 30, isRunning: true, isVisible: true },
+      { id: 2, duration: 40, timeLeft: 40, isRunning: true, isVisible: true },
+      { id: 3, duration: 50, timeLeft: 50, isRunning: true, isVisible: true }
+    ];
+  
+    const [timers, setTimers] = useState(initialTimers);
 
   const decrementTime = (id) => {
     setTimers(prevTimers => {
@@ -34,12 +35,36 @@ const TimerProvider = ({ children }) => {
 
   const removeTimer = (id) => {
     setTimers(prevTimers => {
-      return prevTimers.filter(timer => timer.id !== id);
+      return prevTimers.map(timer => {
+        if (timer.id === id) {
+          return { ...timer, isVisible: false };
+        }
+        return timer;
+      });
     });
   };
 
+  const resetTimer = (id) => {
+    setTimers(prevTimers => {
+      return prevTimers.map(timer => {
+        if (timer.id === id) {
+          return { ...timer, timeLeft: timer.duration, isRunning: true, isVisible: true };
+        }
+        return timer;
+      });
+    });
+  };
+
+  const remountTimer = (id) => {
+    const foundTimer = timers.find(t => t.id === id);
+    if (foundTimer) {
+      resetTimer(id);
+      toggleTimer(id); 
+    }
+  };
+
   return (
-    <TimerContext.Provider value={{ timers, decrementTime, toggleTimer, removeTimer }}>
+    <TimerContext.Provider value={{ timers, decrementTime, toggleTimer, removeTimer, resetTimer, remountTimer }}>
       {children}
     </TimerContext.Provider>
   );
