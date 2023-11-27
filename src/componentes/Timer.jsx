@@ -8,7 +8,6 @@ const Timer = ({ id }) => {
   const timer = timers.find(t => t.id === id);
   const [isRunning, setIsRunning] = useState(timer?.isRunning || false);
 
-
   useEffect(() => {
     let interval;
     if (isRunning && timer?.timeLeft > 0) {
@@ -16,10 +15,8 @@ const Timer = ({ id }) => {
         decrementTime(id);
       }, 1000);
     }
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Detiene el intervalo al desmontar el componente
   }, [id, isRunning, timer, decrementTime]);
-
-
 
   const handleToggle = () => {
     toggleTimer(id);
@@ -29,7 +26,6 @@ const Timer = ({ id }) => {
   const handleRemove = () => {
     removeTimer(id);
   };
-
 
   const handleRemount = () => {
     const foundTimer = timers.find(t => t.id === id);
