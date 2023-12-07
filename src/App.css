@@ -1,18 +1,20 @@
 #root {
-  max-width: 1480px;
+  max-width: 1440px;
   border: solid 2px green;
   background-color: rgb(255, 250, 243);
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   justify-content: center;
 }
 
-.cont-timer {
-  width: fit-content;
-  min-width: 320px;
-  height: 170px;
-  background-color: rgb(255, 216, 169);
-  margin: 1rem;
-  border: solid 2px green;
+#mi-titulo {
+  font-family: 'Lucida Sans';
+  font-weight: bold;
+  font-size: 44;
+  color: darkblue;
   text-align: center;
+}
+
+#mis-timers {
+  display: flex;
+  flex-wrap: wrap;
 }

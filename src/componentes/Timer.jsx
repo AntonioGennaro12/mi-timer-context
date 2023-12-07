@@ -2,57 +2,61 @@ import React, { useContext, useEffect, useState } from 'react';
 import { TimerContext } from '../contexto/TimerContext.jsx';
 import "./estilos/Timer.css";
 
-
-const Timer = ({ id }) => {
-  const { timers, decrementTime, toggleTimer, removeTimer, resetTimer, remountTimer } = useContext(TimerContext);
+  const Timer = ({ id }) => {
+  const { timers, toggleTimer, removeTimer, resetTimer, remountTimer } = useContext(TimerContext);
   const timer = timers.find(t => t.id === id);
-  const [isRunning, setIsRunning] = useState(timer?.isRunning || false);
-
-  useEffect(() => {
-    let interval;
-    if (isRunning && timer?.timeLeft > 0) {
-      interval = setInterval(() => {
-        decrementTime(id);
-      }, 1000);
-    }
-    return () => clearInterval(interval); // Detiene el intervalo al desmontar el componente
-  }, [id, isRunning, timer, decrementTime]);
 
   const handleToggle = () => {
-    toggleTimer(id);
-    setIsRunning(prevIsRunning => !prevIsRunning);
+    if (timer.timeLeft > 0) {
+      toggleTimer(id);
+    } else {
+      remountTimer(id);
+    }
   };
 
   const handleRemove = () => {
     removeTimer(id);
   };
 
-  const handleRemount = () => {
-    const foundTimer = timers.find(t => t.id === id);
-    if (foundTimer) {
-      resetTimer(id);
-      setIsRunning(true); // Forzar el reinicio del timer al remontarlo
+  const handleCambioDuracion = (event) => {
+    timer.duration = event.target.value;
+  };
+
+  const handleStartStop = () => {
+    if (!timer.isRunning) {
+      // Si no está corriendo, se verifica si está en el valor máximo o detenido
+      if (timer.timeLeft === timer.duration) {
+        resetTimer(id); // Reiniciar si está en el máximo
+      } else {
+        toggleTimer(id); // Continuar si está detenido
+      }
     } else {
-      remountTimer(id); // Llama a la función remountTimer con el ID correspondiente
+      toggleTimer(id); // Detener si está en marcha
     }
   };
 
-    return (
-      <div>
-        {timer && timer.isVisible ? (
-          <div>
-            <h2>Timer {id}</h2>
-            <p>Tiempo restante: {timer.timeLeft}</p>
-            <button onClick={handleToggle}>{isRunning ? 'Detener' : 'Continuar'}</button>
-            <button onClick={handleRemove}>Desmontar</button>
-            <button onClick={handleRemount}>Reiniciar Timer</button>
-          </div>
-        ) : (
-          <button onClick={() => remountTimer(id)}>Montar Timer</button>
-        )}
-      </div>
-    );
-  
+  const handleRestart = () => {
+    resetTimer(id); // Reiniciar desde el valor máximo
   };
-  
-  export default Timer;
+
+  return (
+    <div className="cont-timer">
+      {timer && timer.isVisible ? (
+        <div id="mi-timer" style={{ backgroundColor: timer.timeLeft === 0 ? 'red' : timer.timeLeft < timer.duration ? 'yellow' : 'lightgreen'}}>
+          <h2>Timer {id+1}</h2>
+          <p>Corriendo: {timer.isRunning && timer.timeLeft !== timer.duration && timer.timeLeft !== 0 ? 'Sí' : 'No'}</p>
+          <p>Duración: {timer.duration} </p>
+          <input type="number" placeholder="Nueva duración" onChange={handleCambioDuracion} style={{ width:'120px'}}/>
+          <p>Tiempo restante: {timer.timeLeft}</p>
+          <button onClick={handleStartStop}>{timer.isRunning ? 'Detener' : 'Iniciar'}</button>
+          <button onClick={handleRemove}>Desmontar</button>
+          <button onClick={handleRestart}>Reiniciar Timer</button>
+        </div>
+      ) : (
+        <button onClick={() => remountTimer(id)} style={{ width:'100px'}}>Montar Timer</button>
+      )}
+    </div>
+  );
+};
+
+export default Timer;

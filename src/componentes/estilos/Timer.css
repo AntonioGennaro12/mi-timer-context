@@ -1,9 +1,39 @@
+.cont-timer {
+  width: fit-content;
+  min-width: 320px;
+  height: 170px;
+  background-color: rgb(255, 216, 169);
+  margin: 1rem;
+  border: solid 2px green;
+  text-align: center;
+}
+
 #mi-timer {
-    width: 14rem;
-    margin: 1rem;
-    border: solid 2px red;
-    margin: 3vh 3vw 3vh 3vw;
+    width: 16rem;
+    margin: 0rem;
+    border: solid 2px darkgreen;
+    margin: 1.5vh 1.5vw 1vh 2vw;
     background-color: aquamarine;
+    font-family: 'Lucida Sans';
     text-align: center;
+    font-size: 12px;
     justify-content: center;
   }
+
+h2 {
+  margin-top: 10px;
+  margin-bottom: 3px;
+  font-size: 24px;
+}
+
+p {
+  margin: 2px;
+  }
+
+input {
+  text-align: center;
+}
+
+button {
+  margin-bottom: 5px;
+}
